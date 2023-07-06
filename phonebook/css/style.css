@@ -20,6 +20,12 @@ body {
   font-size: 24px;
 }
 
+.btnEdit {
+  background-color: #eff961;
+  border: 1px solid rgb(241, 175, 7);
+  border-radius: 5px;
+}
+
 @media (max-width: 720px) {
   .footerlogo {
     font-size: 14px;
