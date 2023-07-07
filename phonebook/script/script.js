@@ -101,14 +101,15 @@ const data = [
     thead.insertAdjacentHTML('beforeend', `
     <tr>
         <th class='delete'>Удалить</th>
-        <th>Имя</th>
-        <th>Фамилия</th>
+        <th class='names'>Имя</th>
+        <th class='surnames'>Фамилия</th>
         <th>Телефон</th>
         <th></th>
     </tr>
     `);
 
     const tbody = document.createElement('tbody');
+
     table.append(thead, tbody);
     table.tbody = tbody;
 
@@ -194,12 +195,14 @@ const data = [
       list: table.tbody,
       logo,
       btnAdd: buttonGroup.btns[0],
+      btnDel: buttonGroup.btns[1],
       formOverlay: form.overlay,
     };
   };
 
   const createRow = ({name: firstname, surname, phone, buttonEdit}) => {
     const tr = document.createElement('tr');
+    tr.classList.add('contact');
     const tdDel = document.createElement('td');
     tdDel.classList.add('delete');
     const buttonDel = document.createElement('button');
@@ -252,7 +255,13 @@ const data = [
   const init = (selectorApp, title) => {
     const app = document.querySelector(selectorApp);
     const phoneBook = renderPhoneBook(app, title);
-    const {list, logo, btnAdd, formOverlay} = phoneBook;
+    const {
+      list,
+      logo,
+      btnAdd,
+      btnDel,
+      formOverlay,
+    } = phoneBook;
 
 
     // Функционал
@@ -261,6 +270,18 @@ const data = [
 
     hoverRow(allRow, logo);
 
+    btnAdd.addEventListener('click', () => {
+      formOverlay.classList.add('is-visible');
+    });
+
+    formOverlay.addEventListener('click', e => {
+      const target = e.target;
+      if (target === formOverlay ||
+        target.classList.contains('close')) {
+        formOverlay.classList.remove('is-visible');
+      }
+    });
+
     const objEvent = {
       handleEvent() {
         formOverlay.classList.add('is-visible');
@@ -268,7 +289,20 @@ const data = [
     };
 
     btnAdd.addEventListener('click', objEvent);
+    btnDel.addEventListener('click', () => {
+      document.querySelectorAll('.delete').forEach(del => {
+        del.classList.toggle('is-visible');
+      });
+    });
+
+    list.addEventListener('click', e => {
+      const target = e.target;
+      if (target.closest('.del-icon')) {
+        target.closest('.contact').remove();
+      }
+    });
   };
+
 
   window.phoneBookInit = init;
 }
